@@ -1,0 +1,23 @@
+#wpsite-stats-content ul li {
+    border-color: #e9eff3;
+    border-top: none;
+    border-left: 1px solid #f3f6f8;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+#wpsite-stats-content ul li i {
+    margin-right: 10px;
+}
+
+#wpsite-stats-content ul li.blog-name {
+    background-color: #cdcdcd;
+}
+
+#wpsite-stats-content ul li span {
+    font-size: 14px;
+    line-height: inherit;
+    float: none;
+    margin-right: 5px;
+}
+

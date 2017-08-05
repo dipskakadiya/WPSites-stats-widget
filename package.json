@@ -1,0 +1,14 @@
+{
+  "name": "wp-sites-stats-widget",
+  "version": "1.0.0",
+  "description": "Plugin for add widget to show stats of site",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dipskakadiya/wpsites-stats-widget.git"
+  },
+  "author": "",
+  "license": "GPL-2.0",
+  "devDependencies": {
+    "eslint": "^4.4.0"
+  }
+}

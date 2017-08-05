@@ -1,0 +1,14 @@
+/dev-lib
+.editorconfig
+.eslintignore
+.eslintrc
+.gitmodules
+.jscsrc
+.jshintignore
+.jshintrc
+phpcs.xml
+phpunit.xml.dist
+.idea
+.DS_Store
+node_modules
+package-lock.json
