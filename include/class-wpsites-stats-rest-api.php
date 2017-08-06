@@ -81,8 +81,6 @@ if ( ! class_exists( 'WPSites_Stats_Rest_Api' ) ) {
 		public function get_stats() {
 			$sites_stats = array();
 
-			$blog_stats = array();
-
 			if ( is_multisite() ) {
 				$args  = array(
 					'archived' => 0,
@@ -99,17 +97,26 @@ if ( ! class_exists( 'WPSites_Stats_Rest_Api' ) ) {
 				if ( is_multisite() ) {
 					switch_to_blog( $blog_id );
 				}
-				$count_posts        = wp_count_posts( 'post' );
-				$blog_stats['post'] = $count_posts->publish;
 
-				$count_page         = wp_count_posts( 'page' );
-				$blog_stats['page'] = $count_page->publish;
+				$blog_stats = get_transient( 'wpsites_stats_' . $blog_id );
 
-				$count_comments        = wp_count_comments();
-				$blog_stats['comment'] = $count_comments->total_comments;
+				if ( false === $blog_stats ) {
+					$blog_stats = array();
 
-				$count_user          = (object) count_users();
-				$blog_stats['users'] = $count_user->total_users;
+					$count_posts        = wp_count_posts( 'post' );
+					$blog_stats['post'] = $count_posts->publish;
+
+					$count_page         = wp_count_posts( 'page' );
+					$blog_stats['page'] = $count_page->publish;
+
+					$count_comments        = wp_count_comments();
+					$blog_stats['comment'] = $count_comments->total_comments;
+
+					$count_user          = (object) count_users();
+					$blog_stats['users'] = $count_user->total_users;
+
+					set_transient( 'wpsites_stats_' . $blog_id, $blog_stats, MINUTE_IN_SECONDS );
+				}
 
 				$sites_stats[ $blog_id ] = $blog_stats;
 
