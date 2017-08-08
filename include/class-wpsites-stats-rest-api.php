@@ -128,13 +128,14 @@ if ( ! class_exists( 'WPSites_Stats_Rest_Api' ) ) {
 						$count_comments        = wp_count_comments();
 						$blog_stats['comment'] += $count_comments->total_comments;
 
-						$count_user          = (object) count_users();
-						$blog_stats['users'] += $count_user->total_users;
-
 						if ( is_multisite() ) {
 							restore_current_blog();
 						}
 					}
+
+					$count_user          = (object) get_sitestats();
+					$blog_stats['users'] = $count_user->users;
+
 					set_transient( 'wpsites_stats_all_site', $blog_stats, MINUTE_IN_SECONDS );
 				}
 			} else {
