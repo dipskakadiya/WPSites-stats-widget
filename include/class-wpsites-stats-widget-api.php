@@ -63,7 +63,7 @@ if ( ! class_exists( 'WPSites_Stats_Widget_Api' ) ) {
 			}
 			?>
 			<div id="wpsite-stats-content"
-				 data-blog_stats="<?php echo ( empty( $instance['stats_site'] ) && 'all' === $instance['stats_site'] ) ? 'all' : get_current_blog_id(); ?>">
+				 data-blog_stats="<?php echo ( ! empty( $instance['stats_site'] ) && 'all' === $instance['stats_site'] ) ? 'all' : get_current_blog_id(); ?>">
 
 				<ul id="wpsite-stats">
 					<li id="post-count" class="post-count">
