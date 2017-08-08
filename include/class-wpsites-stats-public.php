@@ -45,10 +45,14 @@ if ( ! class_exists( 'WpSites_Stats_Public' ) ) {
 			wp_register_script( 'wpsits-stats-script', WPSITES_STATS_PLUGIN_URL . 'assets/js/action.js', array( 'jquery' ), '1.0', true );
 			wp_register_style( 'wpsits-stats-style', WPSITES_STATS_PLUGIN_URL . 'assets/css/style.css', array(), '1.0' );
 
-			$stats_url   = get_rest_url() . 'wpsites/v1' . '/stats?';
+			$stats_url          = get_rest_url() . 'wpsites/v1' . '/stats?';
+			$stats_url_total = add_query_arg( array(
+				'totalcount' => 1,
+			), $stats_url );
 			$wpsits_stats_array = array(
-				'stats_url' => $stats_url,
-				'stats_interval' => 60000,
+				'stats_url'       => $stats_url,
+				'stats_url_total' => $stats_url_total,
+				'stats_interval'  => 60000,
 			);
 			wp_localize_script( 'wpsits-stats-script', 'wpSitsStats', $wpsits_stats_array );
 		}

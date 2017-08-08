@@ -43,79 +43,61 @@ if ( ! class_exists( 'WPSites_Stats_Widget_Api' ) ) {
 			}
 
 			$stats_url   = get_rest_url() . 'wpsites/v1' . '/stats?';
+
+			if ( ! empty( $instance['stats_site'] ) && 'all' === $instance['stats_site'] ) {
+				$stats_url = add_query_arg(
+					array(
+						'totalcount' => 1,
+					), $stats_url
+				);
+			}
+
 			$api_args    = array(
 				'timeout' => 5,
 			);
-			$blogs_stats = wp_remote_get( $stats_url, $args );
-			if ( ! empty( $blogs_stats['body'] ) ) {
-				$blogs_stats = json_decode( $blogs_stats['body'] );
-			}
+			$blogs_stats = wp_remote_get( $stats_url, $api_args );
 
-			if ( ! empty( $instance['stats_site'] ) && 'all' === $instance['stats_site'] ) {
-				$blogs_args = array(
-					'archived' => 0,
-					'deleted'  => 0,
-					'public'   => 1,
-					'fields'   => 'ids',
-				);
-				$blogs      = get_sites( $blogs_args );
-			} else {
-				$blogs = array( get_current_blog_id() );
+			$stats = new stdClass();
+			if ( ! empty( $blogs_stats['body'] ) ) {
+				$stats = json_decode( $blogs_stats['body'] );
 			}
 			?>
 			<div id="wpsite-stats-content"
 				 data-blog_stats="<?php echo ( empty( $instance['stats_site'] ) && 'all' === $instance['stats_site'] ) ? 'all' : get_current_blog_id(); ?>">
-				<?php
-				foreach ( $blogs as $blog_id ) {
-					$stats = new stdClass;
-					if ( ! empty( $blogs_stats ) ) {
-						$stats = $blogs_stats->{$blog_id};
-					}
-					?>
-					<ul id="wpsite-stats-<?php echo esc_attr( $blog_id ); ?>">
-						<?php
-						if ( ! empty( $instance['stats_site'] ) && 'all' == $instance['stats_site'] ) {
-							$blog_info = get_blog_details( $blog_id );
-							?>
-							<li class="blog-name"><?php echo $blog_info->blogname; ?></li>
-							<?php
-						}
-						?>
-						<li id="post-count" class="post-count">
-							<div>
-								<i class="dashicons dashicons-admin-post"></i>
-								<span class="count">
-								<?php echo ( ! empty( $stats->post ) ) ? esc_html( $stats->post ) : 0; ?>
-							</span>
-								<span class="label">Post</span>
-							</div>
-						</li>
-						<li id="page-count" class="page-count">
-							<i class="dashicons dashicons-admin-page"></i>
+
+				<ul id="wpsite-stats">
+					<li id="post-count" class="post-count">
+						<div>
+							<i class="dashicons dashicons-admin-post"></i>
 							<span class="count">
-							<?php echo ( ! empty( $stats->page ) ) ? esc_html( $stats->page ) : 0; ?>
+							<?php echo ( ! empty( $stats->post ) ) ? esc_html( $stats->post ) : 0; ?>
 						</span>
-							<span class="label">Page</span>
-						</li>
-						<li id="comment-count" class="comment-count">
-							<i class="dashicons dashicons-admin-comments"></i>
-							<span class="count">
-							<?php echo ( ! empty( $stats->comment ) ) ? esc_html( $stats->comment ) : 0; ?>
-						</span>
-							<span class="label">Comment</span>
-						</li>
-						<li id="users-count" class="users-count">
-							<i class="dashicons dashicons-admin-users"></i>
-							<span class="count">
-							<?php echo ( ! empty( $stats->users ) ) ? esc_html( $stats->users ) : 0; ?>
-						</span>
-							<span class="label">Users</span>
-						</li>
-						<?php do_action( 'wpsite_stats_content', $instance, $blog_id ); ?>
-					</ul>
-					<?php
-				}
-				?>
+							<span class="label">Post</span>
+						</div>
+					</li>
+					<li id="page-count" class="page-count">
+						<i class="dashicons dashicons-admin-page"></i>
+						<span class="count">
+						<?php echo ( ! empty( $stats->page ) ) ? esc_html( $stats->page ) : 0; ?>
+					</span>
+						<span class="label">Page</span>
+					</li>
+					<li id="comment-count" class="comment-count">
+						<i class="dashicons dashicons-admin-comments"></i>
+						<span class="count">
+						<?php echo ( ! empty( $stats->comment ) ) ? esc_html( $stats->comment ) : 0; ?>
+					</span>
+						<span class="label">Comment</span>
+					</li>
+					<li id="users-count" class="users-count">
+						<i class="dashicons dashicons-admin-users"></i>
+						<span class="count">
+						<?php echo ( ! empty( $stats->users ) ) ? esc_html( $stats->users ) : 0; ?>
+					</span>
+						<span class="label">Users</span>
+					</li>
+					<?php do_action( 'wpsite_stats_content', $instance ); ?>
+				</ul>
 
 			</div>
 			<?php
