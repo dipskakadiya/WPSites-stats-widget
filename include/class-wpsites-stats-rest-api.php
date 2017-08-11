@@ -107,12 +107,7 @@ if ( ! class_exists( 'WPSites_Stats_Rest_Api' ) ) {
 					);
 					$blogs = get_sites( $args );
 
-					$blog_stats = array(
-						'post'    => 0,
-						'page'    => 0,
-						'comment' => 0,
-						'users'   => 0,
-					);
+					$blog_stats = array();
 
 					foreach ( $blogs as $blog_id ) {
 						if ( is_multisite() ) {
